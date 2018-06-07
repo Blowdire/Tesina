@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Tesina.Models.Song>
+@{
+
+}
+@{
+    var id = ViewData["id"];
+}
+<link type="text/css" rel="stylesheet" href="~/css/cssIndex.css" />
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+      rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/color/jquery.color-2.1.2.min.js"
+        integrity="sha256-H28SdxWrZ387Ldn0qogCzFiUDDxfPiNIyJX7BECQkDE="
+        crossorigin="anonymous"></script>
+<h2 style="text-align:center">Playlist: @ViewData["Title"]</h2>
+
+<button class="prevButton"><</button>
+<button class="nextButton">></button>
+<img id="albumArt" class="center" src="~/images/empty.png" />
+<div>
+    <audio autoplay preload="auto" type="audio/mp3" style="width:100%;" id="player" controls src="" />
+</div>
+
+<div id="draggable" class="drag">
+    <form method="post" enctype="multipart/form-data" asp-controller="Songs" asp-action="Upload">
+        <div class="form-group">
+            <div class="col-md-10">
+                <input style="width:100%;color:transparent;border-radius:5px;" type="file" accept=".mp3" name="files" multiple />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <br />
+                <input id="carica" type="submit" value="Upload" />
+            </div>
+        </div>
+    </form>
+    <button class="closeButton" style="bottom:1px;right:1px;margin-left:90%;margin-top:3%;"><b>X</b></button>
+</div>
+<div class="drag" id="dragDelete">
+    <input type="hidden" id="deleteId" name="deleteid" />
+    <input type="hidden" id="deleteplID" name="deleteplID" />
+    <p style="text-align:center">Eliminare la canzone?</p>
+    <button class="dragButton" style="margin:auto;display:block;width:10vw" id="deleteSongPlaylist">Elimina</button>
+    <button class="closeButton" style="bottom:1px;right:1px;margin-left:90%;margin-top:3%;"><b>X</b></button>
+</div>
+<div class="drag" id="dragUpdate">
+    <div id="labels">
+        <label for="title">Titolo</label><br />
+        <label for="year">Anno</label><br />
+        <label for="genere">genere</label><br />
+    </div>
+    <div id="inputs">
+        <input class="txt" style="color:#000" type="text" required id="updateTitle" name="title" /><br />
+        <input class="txt" style="color:#000" type="date" required id="updateYear" name="year" step="1" /><br />
+        <input class="txt" style="color:#000" type="text" required id="updateGenere" name="genere" /><br />
+        <input type="hidden" id="updateId" name="updateId" />
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <button id="buttonUpdate">Update</button>
+    <button class="closeButton" style="bottom:1px;right:1px;margin-left:90%;margin-top:3%;"><b>X</b></button>
+</div>
+<div class="drag" id="dragPlaylist">
+    <label>Nome Playlist</label>
+    <input type="text" name="playlistName" id="playlistName" />
+    <button class="dragButton" style="margin:auto;display:block;width:10vw" id="creaPlaylist">Crea</button>
+    <button class="closeButton" style="bottom:1px;right:1px;margin-left:90%;margin-top:3%;"><b>X</b></button>
+</div>
+
+<script>
+    $(".drag").draggable();
+</script>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="cella">
+                Titolo
+            </th>
+            <th class="cella">
+                Album
+            </th>
+            <th class="cella">
+                Genere
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="trInner" name="@item.ID" token="@ViewData["UserToken"]" imgbig="@item.AlbumArtBig">
+                <td class="cella">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td class="cella">
+                    @Html.DisplayFor(modelItem => item.Album)
+                </td>
+                <td class="cella">
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    <button style="cursor:pointer" title="@item.Title" name="@item.ID" class="update">Edit</button>
+                    <button style="cursor:pointer" name="@item.ID" idpl="@id" class="deletePL">Delete</button>
+
+
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+@*<button class="createPlaylist">Crea Playlist</button>*@
+<script src="~/js/scriptIndex.js"></script>

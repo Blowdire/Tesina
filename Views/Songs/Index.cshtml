@@ -1,0 +1,369 @@
+﻿@model IEnumerable<Tesina.Models.Song>
+@{
+    ViewData["Title"] = "Canzoni";
+}
+<style>
+    @@media only screen and (min-width: 600px) {
+        .break {
+            display: none;
+        }
+    }
+</style>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link type="text/css" rel="stylesheet" href="~/css/cssIndex.css" />
+<script src="~/lib/jquery/dist/jqueryUi.js"></script>
+<script src="https://code.jquery.com/color/jquery.color-2.1.2.min.js"
+        integrity="sha256-H28SdxWrZ387Ldn0qogCzFiUDDxfPiNIyJX7BECQkDE="
+        crossorigin="anonymous"></script>
+
+<h2 style="text-align:center">Le tue canzoni</h2>
+<input type="text" class="searchBar" /><br /><br />
+<button class="prevButton"><</button>
+<button class="nextButton">></button>
+<img id="albumArt" class="center" src="~/images/empty.png" />
+<script>
+    $(document).ready(function () {
+        window.setInterval(function () {
+            if ($(document).width() <= 450) {
+                $(".download").css("width", "100%");
+                $(".openContext").css("width", "100%");
+                $(".delete").css("width", "100%");
+                $(".update").css("width", "100%");
+                $(".prevButton").css("left", "5vw");
+                $(".nextButton").css("right", "5vw");
+                $(".prevButton").css("margin-top", "6vh");
+                $(".nextButton").css("margin-top", "6vh");
+                $(".drag").css("width", "90%");
+                $(".drag").css("height", "20vh");
+                $(".closeButton").css("position", "absolute");
+
+                $(".closeButton").css("right", "1%");
+                $(".closeButton").css("top", "75%");
+
+                $("#buttonUpdate").css("top", "20%");
+                $("#eliminare").css("font-size", "200%");
+                $(".dragButton").css("width", "80%");
+                $(".addToPlaylist").css("font-size", "120%");
+                $(".addToPlaylist").css("width", "90%");
+
+            }
+        }, 500)
+        window.setInterval(function () {
+            if ($(document).width() <= 1100 && $(document).width() >= 450) {
+                $(".download").css("width", "100%");
+                $(".openContext").css("width", "100%");
+                $(".delete").css("width", "100%");
+                $(".update").css("width", "100%");
+                $(".prevButton").css("left", "20vw");
+                $(".nextButton").css("right", "20vw");
+                $(".prevButton").css("margin-top", "6vh");
+                $(".nextButton").css("margin-top", "6vh");
+                $(".drag").css("width", "50%");
+                $(".drag").css("height", "20%");
+                $("#buttonUpdate").css("top", "25%");
+                $(".addToPlaylist").css("font-size", "120%");
+                $(".addToPlaylist").css("width", "90%");
+            }
+        }, 500)
+        window.setInterval(function () {
+            if ($(document).width() >= 1100) {
+                $(".download").css("width", "49%");
+                $(".openContext").css("width", "49%");
+                $(".delete").css("width", "49%");
+                $(".update").css("width", "49%");
+                $(".prevButton").css("left", "40vw");
+                $(".nextButton").css("right", "40vw");
+                $(".prevButton").css("margin-top", "5.5vh");
+                $(".nextButton").css("margin-top", "5.5vh");
+                $(".drag").css("width", "50%");
+                $(".drag").css("height", "20%");
+                $(".addToPlaylist").css("float", "right");
+                $("#buttonUpdate").css("top", "20%");
+
+            }
+        }, 500)
+    });
+</script>
+<br />
+<p id="playing" style="text-align:center">&nbsp;</p>
+<br />
+<div>
+    <audio autoplay preload="auto" type="audio/mp3" style="width:100%;" id="player" controls controlsList="nodownload" src="" />
+</div>
+
+<div id="draggable" class="drag">
+   
+    <form method="post" enctype="multipart/form-data" asp-controller="Songs" asp-action="Upload">
+        <input name="files" multiple type="file" accept=".mp3"><br>
+        <input id="uploadToServer" value="Upload File to Server" type="submit">
+    </form>
+
+    <div class="progress">
+        <div class="bar" style="width: 100%;"></div>
+        <div class="percent">100%</div>
+    </div>
+
+
+    <button class="closeButton" style="position:relative;left:90%;top:95%;"><b>X</b></button>
+</div>
+<div class="drag" id="dragDelete">
+    <input type="hidden" id="deleteId" name="deleteid" />
+    <p id="eliminare" style="text-align:center;font-size:2vw">Eliminare la canzone?</p>
+    <button class="dragButton" style="margin:auto;display:block;width:10vw" id="deleteSong">Elimina</button>
+    <button class="closeButton" style="position: absolute;right:0px;bottom:20px;height:30px;width:30px;"><b>X</b></button>
+</div>
+<div class="drag" id="dragUpdate" style="height:12vw;">
+    <div id="labels">
+        <label for="title">Titolo</label><br />
+        <label for="year">Artista</label><br />
+    </div>
+    <div id="inputs">
+        <input class="txt" style="color:#000" type="text" required id="updateTitle" name="title" /><br />
+        <input class="txt" style="color:#000" type="text" required id="updateArtist" name="album" step="1" /><br />
+        <input type="hidden" id="updateId" name="updateId" />
+    </div>
+
+    <button id="buttonUpdate">Update</button>
+    <button class="closeButton" style="position: absolute;right:0px;top:75%;height:30px;width:30px;"><b>X</b></button>
+</div>
+<div class="drag" id="dragPlaylist">
+    <br />
+    <label style="display:block;text-align:center;">Nome Playlist</label>
+    <input style="display:block;margin:0 auto;width:60%;" type="text" name="playlistName" id="playlistName" /><br />
+    <button class="dragButton" style="margin:auto;display:block;width:60%" id="creaPlaylist">Crea</button>
+    <button class="closeButton" style="position:relative;left:90%;top:75%;"><b>X</b></button>
+</div>
+<button id="circular">
+    +
+</button>
+<script>
+    $(".drag").draggable();
+</script>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="border-bottom-color:#fff;" class="cella">
+                Titolo
+            </th>
+            <th style="border-bottom-color:#fff;" class="cella">
+                Artista
+            </th>
+            <th class="cella">
+                Album
+            </th>
+            <th style="border-bottom-color:#fff;"></th>
+        </tr>
+    </thead>
+    <tbody id="tBody">
+        @foreach (var item in Model)
+        {
+            <tr class="trInner" name="@item.ID" token="@ViewData["UserToken"]" imgbig="@item.AlbumArtBig" titolo="@item.Title">
+                <td class="cella">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td class="cella">
+                    @Html.DisplayFor(modelItem => item.Artist)
+                </td>
+                <td class="cella">
+                    @Html.DisplayFor(modelItem => item.Album)
+                </td>
+                <td>
+                    <div style="float:left;width:100%">
+                        <button style="cursor:pointer;width:48%;font-size:90%" title="@item.Title" artist="@item.Artist" genre="@item.Genre" name="@item.ID" class="update">Modifica</button><br class="break" />
+                        <button style="cursor:pointer;width:48%;font-size:90%" name="@item.ID" class="delete">Elimina</button>
+                    </div>
+                    <br />
+                    <br />
+
+                    <div style="float:left;width:100%">
+                        <button style="width:48%;font-size:90%" class="download" name="@item.ID" token="@ViewData["UserToken"]">Download</button><br class="break" />
+                        <button style="width:48%;font-size:90%" class="openContext">Aggiungi alla Playlist</button><br />
+                        <div class="context">
+                            @foreach (var pl in ViewData["Playlists"] as IEnumerable<Tesina.Models.Playlist>)
+                            {
+                                <button style="width:45%;right:0;margin-right:3%;font-size:0.9vw;float:right;" class="addToPlaylist" song="@item.ID" key="@pl.Id">@pl.Nome</button><br /><br />
+                            }
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="createPlaylist">Crea Playlist</button>
+@*<button class="prova">Prova</button>*@
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+
+
+<script type="text/javascript" src="~/js/scriptIndex.js"></script>
+<script type="text/javascript">
+    var trinnerClickHadler = function () {
+        var id = $(this).attr("name");
+        var token = $(this).attr("token");
+        var albumart = $(this).attr("imgbig");
+        $('#player').attr("src", 'http://80.211.174.166:61000/stream/' + id + '/' + token);
+        if (!albumart) {
+            $("#albumArt").attr("src", "http://80.211.174.166:61000/greyImage");
+        }
+        else {
+            $("#albumArt").attr("src", albumart);
+        }
+        currentPlaying = id;
+        currentTr = $(this);
+        $(".trInner").bind("mouseenter", backgroundEnter);
+        $(".trInner").bind("mouseleave", backgroundLeave);
+        $(".trInner").css("background-color", 'transparent');
+        $("#playing").html($(this).attr("titolo"));
+        $(this).unbind("mouseenter");
+        $(this).unbind("mouseleave");
+        $(this).css("background-color", 'rgba(0, 68, 225,.4)');
+        nextTr = $(this).closest('tr').next('tr');
+        nextPlaying = $(this).closest('tr').next('tr').attr("name");
+    }
+    //---------------------------------------------------------
+    //event handler click bottone modifica
+    var buttonUpdateClickHandler = function () {
+        var id = $(this).attr("name");
+        var title = $(this).attr("title");
+        var Artist = $(this).attr("artist");
+        $("#updateTitle").val(title);
+        $("#updateArtist").val(Artist);
+        $("#dragUpdate").fadeToggle("fast");
+        $("#updateId").attr("value", id);
+    }
+    //---------------------------------------------------------
+    //event handler click bottone elimina
+    var buttonEliminaClickHandler = function () {
+        var id = $(this).attr("name");
+        $("#dragDelete").fadeToggle("fast");
+        $("#deleteId").attr("value", id);
+    }
+    //---------------------------------------------------------
+    //event handler click bottone download
+    var buttonDownloadClickHandler = function () {
+        var id = $(this).attr("name");
+        var token = $(this).attr("token");
+        window.open('https://80.211.174.166:61000/download/' + id + '/' + token, '_blank');
+    }
+    //---------------------------------------------------------
+    //event handler bottone openContext
+    var buttonOpenContextClickHandler = function () {
+        $(this).next().next().slideToggle();
+        $("#player").stop();
+    }
+    //---------------------------------------------------------
+    //event handler bottone aggiungi a playlist
+    var buttonAddToPlaylistClickHandler = function () {
+        var playId = $(this).attr("key");
+        var songId = $(this).attr("song");
+        var data = {
+            "songId": songId, "playlistId": playId
+        };
+        $.post("songs/song2playlist", data).success(function (data) {
+            alert(data);
+        }
+        ).fail(function () {
+            alert("Error");
+        });
+
+    }
+    //---------------------------------------------------------
+    //funzione cambia sfondo per entrata mouse
+    var backgroundEnter = function () {
+        $(this).css('background-color', 'rgba(0, 68, 225,.6)');
+    }
+    //---------------------------------------------------------
+    //funzione ripristina sfondo mouse lascia
+    var backgroundLeave = function () {
+        $(this).css('background-color', 'transparent');
+    }
+    //---------------------------------------------------------
+
+    function createList() {
+        $.ajax({
+            url: 'http://80.211.174.166:8000/Songs/prova',
+            type: 'GET',
+            success: function (data) {
+                $("#tBody").empty();
+                $.each(data, function (index) {
+                    if (data[index].title == null) {
+                        data[index].title = "";
+                    }
+                    if (data[index].artist == null) {
+                        data[index].artist = "";
+                    }
+                    if (data[index].album == null) {
+                        data[index].album = "";
+                    }
+                    if (data[index].albumArtBig == null) {
+                        data[index].albumArtBig = "";
+                    }
+                    $("#tBody").append('<tr class="trInner" name="' + data[index].id + '" token="' + data[index].userToken + '" imgbig="' + data[index].albumArtBig + '" titolo="' + data[index].title + '"><td class="cella">' + data[index].title + '</td><td class="cella">' + data[index].artist + '</td><td class="cella">' + data[index].album + '</td><td><div style="float:left;width:100%"><button style= "cursor:pointer;width:48%;font-size:90%" title= "' + data[index].title + '" artist= "' + data[index].artist + '" genre= "' + data[index].genre + '" name= "' + data[index].id + '" class="update"> Modifica</button> <br class="break" /><button style="cursor:pointer;width:48%;font-size:90%" name="' + data[index].id + '" class="delete">Elimina</button></div ><br /><br /><div style="float:left;width:100%"><button style= "width:48%;font-size:90%" class="download" name= "' + data[index].id + '" token= "' + data[index].userToken + '"> Download</button > <br class="break" /><button style="width:48%;font-size:90%" name="' + data[index].id + '" class="openContext">Aggiungi alla Playlist</button> <br /> <div class="context" canzone="' + data[index].id + '" ></div></div></td></tr>');
+                })
+                $(".trInner").bind("click", trinnerClickHadler);
+                $(".trInner").bind("mouseenter", backgroundEnter);
+                $(".trInner").bind("mouseleave", backgroundLeave);
+                $(".update").bind("click", buttonUpdateClickHandler);
+                $(".delete").bind("click", buttonEliminaClickHandler);
+                $(".download").bind("click", buttonDownloadClickHandler);
+                $(".openContext").bind("click", buttonOpenContextClickHandler);
+                $.ajax({
+                    url: 'http://80.211.174.166:8000/Songs/provaPlaylist',
+                    type: 'GET',
+                    success: function (data) {
+                        $(".context").empty();
+                        $.each(data, function (index) {
+                            
+                            $(".context").each(function () {
+                                var songID = $(this).closest('div').attr('canzone');
+                                $(this).append('<button style="width:45%;margin-right:0.7vw;font-size:0.9vw;" class="addToPlaylist" song="' + songID + '" key="' + data[index].id + '">' + data[index].nome + '</button>');
+                            });
+                        });
+                        $(".addToPlaylist").bind("click", buttonAddToPlaylistClickHandler);
+                    }
+                });
+            }
+        });
+    }
+    //event handler trInner click
+    
+</script>
+<script>
+
+    (function () {
+
+        var bar = $('.bar');
+        var percent = $('.percent');
+        var status = $('#status');
+
+        $('form').ajaxForm({
+            beforeSend: function () {
+                status.empty();
+                var percentVal = '0%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            success: function () {
+                var percentVal = '100%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            complete: function (xhr) {
+                //status.html(xhr.responseText);
+                //location.reload();
+                $(".drag").slideUp();
+                createList();
+             
+            }
+        });
+
+    })();
+</script>

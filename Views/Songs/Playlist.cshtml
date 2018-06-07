@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Tesina.Models.Playlist>
+@{
+    ViewData["Title"] = "Palylist";
+}
+<style>
+    .createPlaylist {
+        width: 100%;
+        border: 1.5px solid #0044e1;
+        border-radius: 3px;
+        color: rgba(0, 68, 225,.8);
+        background-color: #fff;
+        font-size: 2vw;
+        -webkit-transition: box-shadow 0.5s;
+    }
+
+        .createPlaylist:hover {
+            box-shadow: 1px 1px 1px 1px rgba(0, 68, 225,.5);
+        }
+</style>
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+      rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="~/css/cssIndex.css" />
+<link rel="stylesheet" href="~/build/mediaelementplayer.min.css" />
+@*<script src="//cdn.jsdelivr.net/jquery.shadow-animation/1/mainfile"></script>*@
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/color/jquery.color-2.1.2.min.js"
+        integrity="sha256-H28SdxWrZ387Ldn0qogCzFiUDDxfPiNIyJX7BECQkDE="
+        crossorigin="anonymous"></script>
+
+<h2 style="text-align:center">Le tue palylist</h2>
+
+@foreach (var item in Model)
+{
+    <button key="@item.Id" style="width:100%;" class="createPlaylist">@item.Nome</button>
+}
+<script src="~/js/scriptIndex.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".createPlaylist").click(function () {
+            var id = $(this).attr("key");
+            location.replace("getPlaylist/" + id);
+        });
+    });
+</script>
