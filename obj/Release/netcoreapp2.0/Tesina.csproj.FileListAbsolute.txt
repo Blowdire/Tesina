@@ -1,0 +1,12 @@
+D:\programmazione\asp.net_core\Tesina\Tesina\bin\Release\netcoreapp2.0\Tesina.deps.json
+D:\programmazione\asp.net_core\Tesina\Tesina\bin\Release\netcoreapp2.0\Tesina.runtimeconfig.json
+D:\programmazione\asp.net_core\Tesina\Tesina\bin\Release\netcoreapp2.0\Tesina.runtimeconfig.dev.json
+D:\programmazione\asp.net_core\Tesina\Tesina\bin\Release\netcoreapp2.0\Tesina.dll
+D:\programmazione\asp.net_core\Tesina\Tesina\bin\Release\netcoreapp2.0\Tesina.pdb
+D:\programmazione\asp.net_core\Tesina\Tesina\obj\Release\netcoreapp2.0\Tesina.csproj.CoreCompileInputs.cache
+D:\programmazione\asp.net_core\Tesina\Tesina\obj\Release\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+D:\programmazione\asp.net_core\Tesina\Tesina\obj\Release\netcoreapp2.0\Tesina.AssemblyInfoInputs.cache
+D:\programmazione\asp.net_core\Tesina\Tesina\obj\Release\netcoreapp2.0\Tesina.AssemblyInfo.cs
+D:\programmazione\asp.net_core\Tesina\Tesina\obj\Release\netcoreapp2.0\Tesina.dll
+D:\programmazione\asp.net_core\Tesina\Tesina\obj\Release\netcoreapp2.0\Tesina.pdb
+D:\programmazione\asp.net_core\Tesina\Tesina\obj\Release\netcoreapp2.0\Tesina.csprojResolveAssemblyReference.cache
